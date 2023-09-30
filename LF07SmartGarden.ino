@@ -63,28 +63,19 @@ void translateIR()
   if (irrecv.decodedIRData.flags)
   {
     irrecv.decodedIRData.decodedRawData = last_decodedRawData;
-    Serial.println("REPEAT!");
-  } else
-  {
-    Serial.print("IR code:0x");
-    Serial.println(irrecv.decodedIRData.decodedRawData, HEX);
   }
   switch (irrecv.decodedIRData.decodedRawData)
   {
     case 0xF807FF00: 
-      Serial.println("DOWN");
       currentPageDown();
       break;
     case 0xF609FF00: 
-      Serial.println("UP");
       currentPageUp();
       break;
     case 0xE619FF00:
-      Serial.println("EQ");
       warnOnLCD = !warnOnLCD;
       break;
     default:
-      Serial.println("Button irrelevant");
       break;
   }
   last_decodedRawData = irrecv.decodedIRData.decodedRawData;
@@ -197,13 +188,15 @@ static bool measure_environment( float *temperature, float *humidity )
   static unsigned long measurement_timestamp = millis( );
 
   /* Measure once every second. */
-  if( millis( ) - measurement_timestamp > 1000ul )
+  if( millis( ) - measurement_timestamp > 4000ul )
   {
     if( dht_sensor.measure( temperature, humidity ) == true )
     {
       measurement_timestamp = millis( );
       waterLevelValue = analogRead(WATERLEVEL_PIN);
       luminosity = analogRead(PHOTORESISTOR_PIN);
+
+      Serial.println(String(*temperature) + "," + String(*humidity) + "," + String(waterLevelValue) + "," + String(luminosity));
       return( true );
     }
   }
