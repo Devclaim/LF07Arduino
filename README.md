@@ -1,3 +1,3 @@
 # LF07SmartGarden
 
-## Arduino IDE Code
+Use with Arudino IDE
